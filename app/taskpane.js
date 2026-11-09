@@ -40,7 +40,8 @@
     el.status.className = 'status error';
     el.status.appendChild(document.createTextNode(message + ' '));
     var a = document.createElement('a');
-    a.href = 'settings.html';
+    a.href = '#settings';
+    a.setAttribute('data-view-link', 'settings');
     a.className = 'link';
     a.textContent = '設定画面を開く';
     el.status.appendChild(a);

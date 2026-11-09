@@ -8,10 +8,11 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="pane">
+  <!-- 作成画面と設定画面は同じページ内の切り替え。ページを移すと保存した設定が見えなくなるため。 -->
+  <main id="createView" class="pane">
     <header class="pane-head">
       <h1>AI返信</h1>
-      <a class="link" href="settings.html">設定</a>
+      <a class="link" href="#settings" data-view-link="settings">設定</a>
     </header>
 
     <section class="block">
@@ -36,9 +37,49 @@
     </section>
   </main>
 
+  <main id="settingsView" class="pane" hidden>
+    <header class="pane-head">
+      <h1>AI返信 設定</h1>
+      <a class="link" href="#create" data-view-link="create">作成画面へ</a>
+    </header>
+
+    <section class="block">
+      <label class="label" for="apiKey">Claude API キー</label>
+      <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="未保存">
+      <p id="keyState" class="note">未保存です。</p>
+      <button id="clearKey" type="button" class="btn small" hidden>保存済みのキーを削除</button>
+    </section>
+
+    <section class="block">
+      <label class="label" for="model">モデル</label>
+      <select id="model">
+        <option value="claude-sonnet-5-5">claude-sonnet-5-5（既定）</option>
+        <option value="claude-sonnet-4-5">claude-sonnet-4-5</option>
+      </select>
+      <p class="note">既定は claude-sonnet-5-5 です。</p>
+    </section>
+
+    <section class="block">
+      <label class="label" for="styleSample">文体の参考（自分が書いたメールの履歴）</label>
+      <textarea id="styleSample" rows="10" placeholder="自分が書いた返信メールを数通貼ってください。"></textarea>
+      <p id="sizeNote" class="note"></p>
+    </section>
+
+    <section class="block">
+      <label class="label" for="extraInstructions">追加の指示（任意）</label>
+      <textarea id="extraInstructions" rows="4" placeholder="例：社外の方には必ず「お世話になっております」から書き始める"></textarea>
+    </section>
+
+    <section class="block">
+      <button id="save" type="button" class="btn primary">保存</button>
+      <p id="settingsStatus" class="status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
   <script src="lib/reply-core.js"></script>
   <script src="lib/roaming-store.js"></script>
   <script src="lib/pending-reply.js"></script>
   <script src="app/taskpane.js"></script>
+  <script src="app/settings.js"></script>
 </body>
 </html>

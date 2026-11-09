@@ -1,5 +1,6 @@
 /*
- * 設定画面。API キーは「入力された時だけ」保存し、保存済みの値は画面に戻さない。
+ * 設定画面（作成画面と同じページ内の切り替え）。API キーは「入力された時だけ」保存し、保存済みの値は画面に戻さない。
+ * 保存した値は roamingSettings（と、このページの中で控える分）だけに置く。ブラウザの保存領域には書かない。
  */
 (function () {
   'use strict';
@@ -10,6 +11,8 @@
   function $(id) { return document.getElementById(id); }
 
   var el = {
+    createView: $('createView'),
+    settingsView: $('settingsView'),
     apiKey: $('apiKey'),
     keyState: $('keyState'),
     clearKey: $('clearKey'),
@@ -18,7 +21,7 @@
     extraInstructions: $('extraInstructions'),
     sizeNote: $('sizeNote'),
     save: $('save'),
-    status: $('status')
+    status: $('settingsStatus')
   };
 
   function setStatus(message, kind) {
@@ -35,7 +38,7 @@
     var typedKey = el.apiKey.value.trim();
     return {
       apiKey: typedKey || stored.apiKey,
-      model: el.model.value.trim() || Store.DEFAULT_MODEL,
+      model: el.model.value || Store.DEFAULT_MODEL,
       styleSample: el.styleSample.value,
       extraInstructions: el.extraInstructions.value,
       replyAll: stored.replyAll
@@ -76,6 +79,8 @@
 
     var values = {
       model: candidate.model,
+      // 既定以外を選んだときだけ印を付ける。印が無い保存値は既定として扱う（Store.readAll）。
+      modelPicked: candidate.model !== Store.DEFAULT_MODEL,
       styleSample: candidate.styleSample,
       extraInstructions: candidate.extraInstructions
     };
@@ -112,6 +117,20 @@
       });
   }
 
+  // 作成画面と設定画面の切り替え（data-view-link="create" | "settings"）。
+  function showView(name) {
+    var toSettings = name === 'settings';
+    el.settingsView.hidden = !toSettings;
+    el.createView.hidden = toSettings;
+  }
+
+  function onViewLinkClick(event) {
+    var link = event.target && event.target.closest ? event.target.closest('[data-view-link]') : null;
+    if (!link) return;
+    event.preventDefault();
+    showView(link.getAttribute('data-view-link'));
+  }
+
   function init() {
     var stored = Store.readLatest(Office.context.roamingSettings);
     el.model.value = stored.model;
@@ -123,10 +142,12 @@
 
     el.styleSample.addEventListener('input', updateSizeNote);
     el.extraInstructions.addEventListener('input', updateSizeNote);
-    el.model.addEventListener('input', updateSizeNote);
+    el.model.addEventListener('change', updateSizeNote);
     el.apiKey.addEventListener('input', updateSizeNote);
     el.save.addEventListener('click', onSave);
     el.clearKey.addEventListener('click', onClearKey);
+    document.addEventListener('click', onViewLinkClick);
+    showView('create');
   }
 
   Office.onReady(function () {
