@@ -26,8 +26,6 @@
   };
 
   var lastReply = '';
-  // 元メールがテキスト形式か（作成時に調べる）。返信画面への入れ方を変えるのに使う。
-  var lastMailIsPlainText = false;
   // 保留中の返信文の保存（作成直後に始める）。null は保存していない、Promise は保存中または保存済み。
   var pendingSaved = null;
 
@@ -66,22 +64,8 @@
     });
   }
 
-  function readBodyHtml(item) {
-    return new Promise(function (resolve) {
-      try {
-        item.body.getAsync(Office.CoercionType.Html, function (res) {
-          resolve(res && res.status === Office.AsyncResultStatus.Succeeded ? (res.value || '') : '');
-        });
-      } catch (err) {
-        resolve('');
-      }
-    });
-  }
-
   function readMail(item) {
-    return Promise.all([readBody(item), readBodyHtml(item)]).then(function (bodies) {
-      var body = bodies[0];
-      lastMailIsPlainText = Core.isPlainTextMailHtml(bodies[1]);
+    return readBody(item).then(function (body) {
       return {
         subject: item.subject || '',
         from: item.from || null,
@@ -131,13 +115,8 @@
       .then(function (res) {
         if (res.ok) {
           lastReply = res.text;
-          // 返信画面へ自動で入れるのは、htmlBody が使えないテキスト形式のメールと、
-          // 返信画面を開く API が無い iPhone・Android。HTML 形式は htmlBody で直接渡す（二重に入れない）。
-          if (lastMailIsPlainText || isMobile()) {
-            savePending(item, res.text);
-          } else {
-            pendingSaved = null;
-          }
+          // 返信画面が開いたらイベント処理が差し込む（iPhone は利用者が返信ボタンで開く）。
+          savePending(item, res.text);
           el.result.value = res.text;
           el.resultBlock.hidden = false;
           setStatus('作成しました。内容を確認して、返信画面を開くか、コピーしてください。', 'ok');
@@ -166,10 +145,6 @@
     pendingSaved.state = state;
   }
 
-  function isMobile() {
-    var platform = Office.context.platform;
-    return platform === 'iOS' || platform === 'Android';
-  }
 
   function displayReply(formData) {
     var item = Office.context.mailbox.item;
@@ -184,8 +159,9 @@
     setStatus('返信画面を開けませんでした。「コピー」で文面をコピーして、返信に貼り付けてください。', 'error');
   }
 
-  // テキスト形式のメールは htmlBody のタグが文字で出るため本文を渡さず、開いた返信画面に
-  // イベント処理が差し込む。保留の保存が終わる前に開くと差し込めないので、終わるのを待つ。
+  // 返信画面には本文を渡さず、開いた返信画面にイベント処理が本文の形式に合わせて差し込む。
+  // （htmlBody は、返信画面がテキスト編集になるとタグが文字で出るため使わない。）
+  // 保留の保存が終わる前に開くと差し込めないので、終わるのを待つ。
   function openReplyForPending(saving) {
     function open(ok) {
       if (!ok) {
@@ -208,16 +184,8 @@
 
   function onOpenReply() {
     if (!lastReply) return;
-    if (pendingSaved) {
-      openReplyForPending(pendingSaved);
-      return;
-    }
-    try {
-      displayReply({ htmlBody: Core.buildReplyHtmlBody(lastReply) });
-      setStatus('返信画面を開きました。', 'ok');
-    } catch (err) {
-      openFailed();
-    }
+    if (!pendingSaved) return;
+    openReplyForPending(pendingSaved);
   }
 
   function copyText(text) {
