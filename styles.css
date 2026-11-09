@@ -1,0 +1,140 @@
+/* 作業ウィンドウ・設定画面共通。375px（iPhone 幅）でも崩れないように、幅は常に 100% に合わせる。 */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Yu Gothic UI", "Meiryo", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1f2328;
+  background: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.pane {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px;
+}
+
+.pane-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid #d0d7de;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+h1 { font-size: 18px; margin: 0; }
+h2 { font-size: 15px; margin: 0 0 6px; }
+
+.block {
+  margin-bottom: 16px;
+}
+
+.block[hidden] { display: none; }
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+textarea,
+input[type="text"],
+input[type="password"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  font: inherit;
+  padding: 8px;
+  border: 1px solid #8c959f;
+  border-radius: 6px;
+  background: #ffffff;
+  color: inherit;
+}
+
+textarea { resize: vertical; min-height: 4em; }
+
+textarea[readonly] { background: #f6f8fa; }
+
+.btn {
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 16px;
+  margin-top: 8px;
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid #8c959f;
+  border-radius: 6px;
+  background: #f6f8fa;
+  color: #1f2328;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #0969da;
+  border-color: #0969da;
+  color: #ffffff;
+}
+
+.btn.small {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-weight: 400;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn[hidden] { display: none; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actions .btn { margin-top: 0; flex: 1 1 140px; }
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 8px 0;
+}
+
+.check[hidden] { display: none; }
+
+.check input { width: 20px; height: 20px; flex: 0 0 auto; }
+
+.status {
+  margin: 8px 0 0;
+  min-height: 1.5em;
+}
+
+.status.ok { color: #1a7f37; }
+.status.error { color: #cf222e; }
+
+.note {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #57606a;
+}
+
+.note.error { color: #cf222e; }
+.note[hidden] { display: none; }
+
+.link {
+  color: #0969da;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}

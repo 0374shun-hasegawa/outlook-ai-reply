@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI返信</title>
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="pane">
+    <header class="pane-head">
+      <h1>AI返信</h1>
+      <a class="link" href="settings.html">設定</a>
+    </header>
+
+    <section class="block">
+      <label class="label" for="purpose">書きたいメールの趣旨（雑なメモでOK）</label>
+      <textarea id="purpose" rows="5" placeholder="例：資料を拝見しました。修正版を追って送ります。次回 2099/01/01 10:00〜"></textarea>
+      <button id="create" type="button" class="btn primary">作成</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="resultBlock" class="block" hidden>
+      <h2 class="label">作成された返信文</h2>
+      <textarea id="result" rows="10" readonly aria-label="作成された返信文"></textarea>
+      <p id="platformNote" class="note" hidden></p>
+      <label id="replyAllLabel" class="check">
+        <input id="replyAll" type="checkbox" checked>
+        <span>全員に返信する（外すと返信者のみ）</span>
+      </label>
+      <div class="actions">
+        <button id="openReply" type="button" class="btn">返信画面を開く</button>
+        <button id="copy" type="button" class="btn">コピー</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="lib/reply-core.js"></script>
+  <script src="lib/roaming-store.js"></script>
+  <script src="app/taskpane.js"></script>
+</body>
+</html>
