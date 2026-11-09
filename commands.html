@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>AI返信 コマンド</title>
   <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="lib/pending-reply.js"></script>
+  <script src="app/launchevent.js"></script>
 </head>
 <body>
-  <!-- ボタンは作業ウィンドウを開くだけなので、ここでは処理を持たない（FunctionFile の必須枠）。 -->
+  <!-- 閲覧時のボタンは作業ウィンドウを開くだけ。返信画面が開いたとき（OnNewMessageCompose）の差し込みを launchevent.js が受け持つ。 -->
 </body>
 </html>

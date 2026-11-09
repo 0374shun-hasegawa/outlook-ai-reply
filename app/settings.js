@@ -43,7 +43,7 @@
   }
 
   function updateSizeNote() {
-    var stored = Store.readAll(Office.context.roamingSettings);
+    var stored = Store.readLatest(Office.context.roamingSettings);
     var check = Core.checkRoamingSize(buildCandidate(stored));
     el.sizeNote.className = 'note' + (check.ok ? '' : ' error');
     el.sizeNote.textContent = check.ok
@@ -60,7 +60,7 @@
 
   function onSave() {
     var roaming = Office.context.roamingSettings;
-    var stored = Store.readAll(roaming);
+    var stored = Store.readLatest(roaming);
     var candidate = buildCandidate(stored);
     var check = Core.checkRoamingSize(candidate);
 
@@ -113,7 +113,7 @@
   }
 
   function init() {
-    var stored = Store.readAll(Office.context.roamingSettings);
+    var stored = Store.readLatest(Office.context.roamingSettings);
     el.model.value = stored.model;
     el.styleSample.value = stored.styleSample;
     el.extraInstructions.value = stored.extraInstructions;

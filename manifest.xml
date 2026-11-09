@@ -5,7 +5,7 @@
   xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xsi:type="MailApp">
   <Id>937ae64f-0e50-4ab6-a746-a93673eba197</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.1.0.0</Version>
   <ProviderName>テクノア</ProviderName>
   <DefaultLocale>ja-JP</DefaultLocale>
   <DisplayName DefaultValue="AI返信"/>
@@ -46,6 +46,10 @@
       </Requirements>
       <Hosts>
         <Host xsi:type="MailHost">
+                    <Runtimes>
+            <Runtime resid="WebViewRuntime.Url">
+            </Runtime>
+          </Runtimes>
           <DesktopFormFactor>
             <FunctionFile resid="Commands.Url"/>
             <ExtensionPoint xsi:type="MessageReadCommandSurface">
@@ -69,6 +73,12 @@
                   </Control>
                 </Group>
               </OfficeTab>
+            </ExtensionPoint>
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
             </ExtensionPoint>
           </DesktopFormFactor>
           <MobileFormFactor>
@@ -98,6 +108,12 @@
                 </Control>
               </Group>
             </ExtensionPoint>
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
+            </ExtensionPoint>
           </MobileFormFactor>
         </Host>
       </Hosts>
@@ -114,6 +130,7 @@
         <bt:Urls>
           <bt:Url id="Commands.Url" DefaultValue="https://0374shun-hasegawa.github.io/outlook-ai-reply/commands.html"/>
           <bt:Url id="Taskpane.Url" DefaultValue="https://0374shun-hasegawa.github.io/outlook-ai-reply/taskpane.html"/>
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://0374shun-hasegawa.github.io/outlook-ai-reply/commands.html"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="GroupLabel" DefaultValue="AI返信"/>
