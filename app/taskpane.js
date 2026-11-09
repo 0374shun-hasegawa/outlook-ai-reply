@@ -102,6 +102,7 @@
           model: settings.model,
           purpose: purpose,
           mail: mail,
+          myName: profile.displayName || '',
           myAddress: profile.emailAddress || '',
           styleSample: settings.styleSample,
           extraInstructions: settings.extraInstructions
